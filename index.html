@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supermercado LocalStorage</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div id="contenedor">
+
+        <header>
+            <h1>SUPERMERCADO LOCALSTORAGE</h1>
+        </header>
+
+        <p class="mensajes">Área de mensajes</p>
+
+        <main>
+
+            <button id="btn-agregar">Agregar Producto</button>
+
+            <section id="formularios">
+
+                <!-- Buscar -->
+                <form id="form-buscar">
+
+                    <h3>Buscar Producto</h3>
+
+                    <input type="text" name="nombre" placeholder="Nombre del producto">
+
+                    <input type="number" name="codigo" placeholder="Código">
+
+                    <input type="submit" value="Buscar">
+
+                </form>
+
+                <div class="limpiar">
+                    <button id="btn-filtros">Limpiar Filtros</button>
+                </div>
+
+                <!-- Agregar -->
+                <form id="form-agregar">
+
+                    <div class="cerrar">
+                        <button class="btn-cerrar-formAgregar">X</button>
+                    </div>
+
+                    <h3>Agregar Producto</h3>
+
+                    <input type="text" name="nombre" placeholder="Nombre" required>
+
+                    <input type="number" name="precio" placeholder="Precio" required>
+
+                    <input type="number" name="codigo" placeholder="Código" required>
+
+                    <input type="submit" value="Agregar">
+
+                </form>
+
+            </section>
+
+            <!-- Productos -->
+            <section id="listado">
+
+                <h3>Productos</h3>
+
+                <div id="listadoProductos">
+
+                    <!--
+                    <div class="producto">
+
+                        <div class="info">
+
+                            <p>Nombre: Leche</p>
+
+                            <p>Precio: $1800</p>
+
+                            <p>Código: 1</p>
+
+                        </div>
+
+                        <div class="botones">
+
+                            <button class="btn-carrito">
+                                Agregar al carrito
+                            </button>
+
+                        </div>
+
+                    </div>
+                    -->
+
+                </div>
+
+            </section>
+
+            <!-- Carrito -->
+            <section id="carrito">
+
+                <h3>Carrito</h3>
+
+                <div id="listadoCarrito">
+
+                    <!-- Se completa desde JavaScript -->
+
+                </div>
+
+                <h2 id="total">
+                    Total: $0
+                </h2>
+
+                <button id="btn-vaciar">
+                    Vaciar carrito
+                </button>
+
+            </section>
+
+        </main>
+
+        <footer>
+
+            <p>7mo 1ra PROG. Grupo A</p>
+
+            <p>Sitios Web Dinámicos</p>
+
+        </footer>
+
+    </div>
+
+    <script src="./js/mostrarMensajes.js"></script>
+    <script src="./js/eventos.js"></script>
+    <script src="./js/modulos.js"></script>
+
+</body>
+
+</html>
