@@ -96,6 +96,27 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     //==============================
+    // CERRAR FORMULARIO EDITAR
+    //==============================
+
+    document.querySelector(".btn-cerrar-formEditar")
+    .addEventListener("click", (e)=>{
+
+        e.preventDefault();
+
+        document.querySelector("#form-editar").style.display = "none";
+
+    });
+
+    //==============================
+    // GUARDAR EDICIÓN (UPDATE)
+    //==============================
+
+    const formEditar = document.querySelector("#form-editar");
+
+    formEditar.addEventListener("submit", editarProducto);
+
+    //==============================
     // VACIAR CARRITO
     //==============================
 

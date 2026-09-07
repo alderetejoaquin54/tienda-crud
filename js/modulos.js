@@ -90,79 +90,55 @@ const mostrarProductos = (productosEncontrados)=>{
 
     contenedor.innerHTML = "";
 
-    if(productosEncontrados){
+    const lista = productosEncontrados
+        ? productosEncontrados
+        : JSON.parse(localStorage.getItem("productos")) || [];
 
-        productosEncontrados.forEach(p=>{
+    if(lista.length === 0){
 
-            contenedor.innerHTML += `
+        contenedor.innerHTML = "<p>No hay productos para mostrar.</p>";
 
-            <div class="producto">
-
-                <div class="info">
-
-                    <p><b>${p.nombre}</b></p>
-
-                    <p>Precio: $${p.precio}</p>
-
-                    <p>Código: ${p.codigo}</p>
-
-                </div>
-
-                <div class="botones">
-
-                    <button onclick="agregarAlCarrito(${p.codigo})">
-
-                        Agregar al carrito
-
-                    </button>
-
-                </div>
-
-            </div>
-
-            `;
-
-        });
+        return;
 
     }
 
-    else{
+    lista.forEach(p=>{
 
-        productos = JSON.parse(localStorage.getItem("productos")) || [];
+        contenedor.innerHTML += `
 
-        productos.forEach(p=>{
+        <div class="producto">
 
-            contenedor.innerHTML += `
+            <div class="info">
 
-            <div class="producto">
+                <p><b>${p.nombre}</b></p>
 
-                <div class="info">
+                <p>Precio: $${p.precio}</p>
 
-                    <p><b>${p.nombre}</b></p>
-
-                    <p>Precio: $${p.precio}</p>
-
-                    <p>Código: ${p.codigo}</p>
-
-                </div>
-
-                <div class="botones">
-
-                    <button onclick="agregarAlCarrito(${p.codigo})">
-
-                        Agregar al carrito
-
-                    </button>
-
-                </div>
+                <p>Código: ${p.codigo}</p>
 
             </div>
 
-            `;
+            <div class="botones">
 
-        });
+                <button class="btn-agregar-carrito" onclick="agregarAlCarrito(${p.codigo})">
+                    Agregar al carrito
+                </button>
 
-    }
+                <button class="btn-editar" onclick="abrirEditar(${p.codigo})">
+                    Editar
+                </button>
+
+                <button class="btn-eliminar-producto" onclick="eliminarProducto(${p.codigo})">
+                    Eliminar
+                </button>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
 
 }
 
@@ -311,5 +287,113 @@ const vaciarCarrito = ()=>{
     mostrarMensaje("Carrito vaciado");
 
     mostrarCarrito();
+
+}
+
+//=========================================
+// ELIMINAR PRODUCTO DEL LISTADO
+//=========================================
+
+const eliminarProducto = (codigo)=>{
+
+    productos = JSON.parse(localStorage.getItem("productos")) || [];
+
+    productos = productos.filter(p => p.codigo != codigo);
+
+    localStorage.setItem("productos", JSON.stringify(productos));
+
+    // Si el producto estaba en el carrito, también lo eliminamos
+    carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    carrito = carrito.filter(p => p.codigo != codigo);
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+
+    mostrarMensaje("Producto eliminado del listado");
+
+    mostrarProductos();
+
+    mostrarCarrito();
+
+}
+
+//=========================================
+// ABRIR FORMULARIO EDITAR
+//=========================================
+
+const abrirEditar = (codigo)=>{
+
+    productos = JSON.parse(localStorage.getItem("productos")) || [];
+
+    const producto = productos.find(p => p.codigo == codigo);
+
+    if(!producto) return;
+
+    const formEditar = document.querySelector("#form-editar");
+
+    formEditar.nombre.value = producto.nombre;
+
+    formEditar.precio.value = producto.precio;
+
+    formEditar.codigoOriginal.value = producto.codigo;
+
+    formEditar.style.display = "block";
+
+    formEditar.scrollIntoView({ behavior: "smooth" });
+
+}
+
+//=========================================
+// EDITAR PRODUCTO (UPDATE)
+//=========================================
+
+const editarProducto = (e)=>{
+
+    e.preventDefault();
+
+    const formEditar = document.querySelector("#form-editar");
+
+    const codigoOriginal = Number(formEditar.codigoOriginal.value);
+
+    const nuevoNombre = formEditar.nombre.value;
+
+    const nuevoPrecio = Number(formEditar.precio.value);
+
+    productos = JSON.parse(localStorage.getItem("productos")) || [];
+
+    const indice = productos.findIndex(p => p.codigo == codigoOriginal);
+
+    if(indice !== -1){
+
+        productos[indice].nombre = nuevoNombre;
+
+        productos[indice].precio = nuevoPrecio;
+
+        localStorage.setItem("productos", JSON.stringify(productos));
+
+        // Actualizar también en el carrito si existe
+        carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+
+        const enCarrito = carrito.find(p => p.codigo == codigoOriginal);
+
+        if(enCarrito){
+
+            enCarrito.nombre = nuevoNombre;
+
+            enCarrito.precio = nuevoPrecio;
+
+            localStorage.setItem("carrito", JSON.stringify(carrito));
+
+            mostrarCarrito();
+
+        }
+
+        mostrarMensaje("Producto editado correctamente");
+
+        mostrarProductos();
+
+    }
+
+    formEditar.reset();
+
+    formEditar.style.display = "none";
 
 }

@@ -100,6 +100,10 @@ form input[type="submit"]{
     display: none;
 }
 
+#form-editar{
+    display: none;
+}
+
 #listado{
     margin-top: 2%;
 }
@@ -124,11 +128,25 @@ form input[type="submit"]{
 }
 
 .botones button{
-    background: #43a047;
     color: white;
     border: none;
     padding: 8% 12%;
     cursor: pointer;
+    margin: 2% 0;
+    display: block;
+    width: 100%;
+}
+
+.btn-agregar-carrito{
+    background: #43a047;
+}
+
+.btn-editar{
+    background: #1565c0;
+}
+
+.btn-eliminar-producto{
+    background: crimson;
 }
 
 #carrito{
