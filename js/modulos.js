@@ -11,49 +11,49 @@ if(productos.length == 0){
         {
             nombre:"Leche",
             precio:1800,
-            codigo:1
+            seccion:"Heladera"
         },
 
         {
             nombre:"Pan",
             precio:1200,
-            codigo:2
+            seccion:"Panaderia"
         },
 
         {
             nombre:"Arroz",
             precio:1500,
-            codigo:3
+            seccion:"Almacen"
         },
 
         {
             nombre:"Fideos",
             precio:1300,
-            codigo:4
+            seccion:"Almacen"
         },
 
         {
             nombre:"Agua",
             precio:900,
-            codigo:5
+            seccion:"Heladera"
         },
 
         {
             nombre:"Gaseosa",
             precio:2100,
-            codigo:6
+            seccion:"Heladeras"
         },
 
         {
             nombre:"Aceite",
             precio:2500,
-            codigo:7
+            seccion:"Almacen"
         },
 
         {
             nombre:"Azúcar",
             precio:1400,
-            codigo:8
+            seccion:"Almacen"
         }
 
     ];
@@ -114,21 +114,21 @@ const mostrarProductos = (productosEncontrados)=>{
 
                 <p>Precio: $${p.precio}</p>
 
-                <p>Código: ${p.codigo}</p>
+                <p>Seccion: ${p.seccion}</p>
 
             </div>
 
             <div class="botones">
 
-                <button class="btn-agregar-carrito" onclick="agregarAlCarrito(${p.codigo})">
+                <button class="btn-agregar-carrito" onclick="agregarAlCarrito(${p.seccion})">
                     Agregar al carrito
                 </button>
 
-                <button class="btn-editar" onclick="abrirEditar(${p.codigo})">
+                <button class="btn-editar" onclick="abrirEditar(${p.seccion})">
                     Editar
                 </button>
 
-                <button class="btn-eliminar-producto" onclick="eliminarProducto(${p.codigo})">
+                <button class="btn-eliminar-producto" onclick="eliminarProducto(${p.seccion})">
                     Eliminar
                 </button>
 
@@ -156,7 +156,7 @@ const buscarProductos = (productoBuscado)=>{
 
         ||
 
-        p.codigo == productoBuscado.codigo;
+        p.seccion == productoBuscado.seccion;
 
     });
 
@@ -176,11 +176,11 @@ const agregarAlCarrito = (codigo)=>{
 
     productos = JSON.parse(localStorage.getItem("productos")) || [];
 
-    const producto = productos.find(p => p.codigo == codigo);
+    const producto = productos.find(p => p.seccion == seccion);
 
     carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
-    const existe = carrito.find(p => p.codigo == codigo);
+    const existe = carrito.find(p => p.seccion == seccion);
 
     if(existe){
 
@@ -189,7 +189,7 @@ const agregarAlCarrito = (codigo)=>{
     }else{
 
         carrito.push({
-            codigo: producto.codigo,
+            seccion: producto.seccion,
             nombre: producto.nombre,
             precio: producto.precio,
             cantidad: 1
@@ -241,7 +241,7 @@ const mostrarCarrito = ()=>{
 
             </div>
 
-            <button onclick="eliminarDelCarrito(${p.codigo})">
+            <button onclick="eliminarDelCarrito(${p.seccion})">
                 Eliminar
             </button>
 
@@ -260,11 +260,11 @@ const mostrarCarrito = ()=>{
 // ELIMINAR DEL CARRITO
 //=========================================
 
-const eliminarDelCarrito = (codigo)=>{
+const eliminarDelCarrito = (seccion)=>{
 
     carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
-    carrito = carrito.filter(p => p.codigo != codigo);
+    carrito = carrito.filter(p => p.seccion != seccion);
 
     localStorage.setItem("carrito", JSON.stringify(carrito));
 
@@ -294,17 +294,17 @@ const vaciarCarrito = ()=>{
 // ELIMINAR PRODUCTO DEL LISTADO
 //=========================================
 
-const eliminarProducto = (codigo)=>{
+const eliminarProducto = (seccion)=>{
 
     productos = JSON.parse(localStorage.getItem("productos")) || [];
 
-    productos = productos.filter(p => p.codigo != codigo);
+    productos = productos.filter(p => p.seccion != seccion);
 
     localStorage.setItem("productos", JSON.stringify(productos));
 
     // Si el producto estaba en el carrito, también lo eliminamos
     carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-    carrito = carrito.filter(p => p.codigo != codigo);
+    carrito = carrito.filter(p => p.seccion != seccion);
     localStorage.setItem("carrito", JSON.stringify(carrito));
 
     mostrarMensaje("Producto eliminado del listado");
@@ -319,11 +319,11 @@ const eliminarProducto = (codigo)=>{
 // ABRIR FORMULARIO EDITAR
 //=========================================
 
-const abrirEditar = (codigo)=>{
+const abrirEditar = (seccion)=>{
 
     productos = JSON.parse(localStorage.getItem("productos")) || [];
 
-    const producto = productos.find(p => p.codigo == codigo);
+    const producto = productos.find(p => p.seccion == seccion);
 
     if(!producto) return;
 
@@ -333,7 +333,7 @@ const abrirEditar = (codigo)=>{
 
     formEditar.precio.value = producto.precio;
 
-    formEditar.codigoOriginal.value = producto.codigo;
+    formEditar.seccionOriginal.value = producto.seccionOriginal;
 
     formEditar.style.display = "block";
 
@@ -351,7 +351,7 @@ const editarProducto = (e)=>{
 
     const formEditar = document.querySelector("#form-editar");
 
-    const codigoOriginal = Number(formEditar.codigoOriginal.value);
+    const seccionOriginal = Number(formEditar.seccionOriginal.value);
 
     const nuevoNombre = formEditar.nombre.value;
 
@@ -359,7 +359,7 @@ const editarProducto = (e)=>{
 
     productos = JSON.parse(localStorage.getItem("productos")) || [];
 
-    const indice = productos.findIndex(p => p.codigo == codigoOriginal);
+    const indice = productos.findIndex(p => p.codigo == seccionOriginal);
 
     if(indice !== -1){
 
@@ -372,7 +372,7 @@ const editarProducto = (e)=>{
         // Actualizar también en el carrito si existe
         carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
-        const enCarrito = carrito.find(p => p.codigo == codigoOriginal);
+        const enCarrito = carrito.find(p => p.seccion == seccionOriginal);
 
         if(enCarrito){
 

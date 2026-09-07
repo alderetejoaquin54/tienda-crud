@@ -1,5 +1,3 @@
-// Este archivo responde a los eventos del DOM
-// interactuando con el usuario y los datos de modulos.js
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -48,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             precio: Number(formAgregar.precio.value),
 
-            codigo: Number(formAgregar.codigo.value)
+            seccion: Text(formAgregar.seccion.value)
 
         };
 
@@ -74,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             nombre: formBuscar.nombre.value,
 
-            codigo: Number(formBuscar.codigo.value)
+            seccion: Text(formBuscar.seccion.value)
 
         };
 
