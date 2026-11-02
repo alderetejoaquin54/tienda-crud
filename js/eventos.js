@@ -42,11 +42,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const nuevoProducto = {
 
+            id: Date.now(),
+
             nombre: formAgregar.nombre.value,
 
             precio: Number(formAgregar.precio.value),
 
-            seccion: Text(formAgregar.seccion.value)
+            seccion: String(formAgregar.seccion.value)
 
         };
 
@@ -72,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             nombre: formBuscar.nombre.value,
 
-            seccion: Text(formBuscar.seccion.value)
+            seccion: String(formBuscar.seccion.value)
 
         };
 

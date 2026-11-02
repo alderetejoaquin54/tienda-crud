@@ -4,63 +4,7 @@
 
 let productos = JSON.parse(localStorage.getItem("productos")) || [];
 
-if(productos.length == 0){
 
-    productos = [
-
-        {
-            nombre:"Leche",
-            precio:1800,
-            seccion:"Heladera"
-        },
-
-        {
-            nombre:"Pan",
-            precio:1200,
-            seccion:"Panaderia"
-        },
-
-        {
-            nombre:"Arroz",
-            precio:1500,
-            seccion:"Almacen"
-        },
-
-        {
-            nombre:"Fideos",
-            precio:1300,
-            seccion:"Almacen"
-        },
-
-        {
-            nombre:"Agua",
-            precio:900,
-            seccion:"Heladera"
-        },
-
-        {
-            nombre:"Gaseosa",
-            precio:2100,
-            seccion:"Heladeras"
-        },
-
-        {
-            nombre:"Aceite",
-            precio:2500,
-            seccion:"Almacen"
-        },
-
-        {
-            nombre:"Azúcar",
-            precio:1400,
-            seccion:"Almacen"
-        }
-
-    ];
-
-    localStorage.setItem("productos", JSON.stringify(productos));
-
-}
 
 //=========================================
 // AGREGAR PRODUCTO
@@ -120,15 +64,15 @@ const mostrarProductos = (productosEncontrados)=>{
 
             <div class="botones">
 
-                <button class="btn-agregar-carrito" onclick="agregarAlCarrito(${p.seccion})">
+                <button class="btn-agregar-carrito" onclick="agregarAlCarrito('${p.id}')">
                     Agregar al carrito
                 </button>
 
-                <button class="btn-editar" onclick="abrirEditar(${p.seccion})">
+                <button class="btn-editar" onclick="abrirEditar('${p.id}')">
                     Editar
                 </button>
 
-                <button class="btn-eliminar-producto" onclick="eliminarProducto(${p.seccion})">
+                <button class="btn-eliminar-producto" onclick="eliminarProducto('${p.id}')">
                     Eliminar
                 </button>
 
@@ -152,11 +96,11 @@ const buscarProductos = (productoBuscado)=>{
 
     const encontrados = productos.filter(p=>{
 
-        return p.nombre.toLowerCase().includes(productoBuscado.nombre.toLowerCase())
+        const coincideNombre = productoBuscado.nombre === "" || p.nombre.toLowerCase().includes(productoBuscado.nombre.toLowerCase());
 
-        ||
+        const coincideSeccion = productoBuscado.seccion === "" || p.seccion.toLowerCase().includes(productoBuscado.seccion.toLowerCase());
 
-        p.seccion == productoBuscado.seccion;
+        return coincideNombre && coincideSeccion;
 
     });
 
@@ -172,15 +116,15 @@ let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 // AGREGAR AL CARRITO
 //=========================================
 
-const agregarAlCarrito = (codigo)=>{
+const agregarAlCarrito = (id)=>{
 
     productos = JSON.parse(localStorage.getItem("productos")) || [];
 
-    const producto = productos.find(p => p.seccion == seccion);
+    const producto = productos.find(p => p.id == id);
 
     carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
-    const existe = carrito.find(p => p.seccion == seccion);
+    const existe = carrito.find(p => p.id == id);
 
     if(existe){
 
@@ -189,6 +133,7 @@ const agregarAlCarrito = (codigo)=>{
     }else{
 
         carrito.push({
+            id: producto.id,
             seccion: producto.seccion,
             nombre: producto.nombre,
             precio: producto.precio,
@@ -241,7 +186,7 @@ const mostrarCarrito = ()=>{
 
             </div>
 
-            <button onclick="eliminarDelCarrito(${p.seccion})">
+            <button onclick="eliminarDelCarrito('${p.id}')">
                 Eliminar
             </button>
 
@@ -260,11 +205,11 @@ const mostrarCarrito = ()=>{
 // ELIMINAR DEL CARRITO
 //=========================================
 
-const eliminarDelCarrito = (seccion)=>{
+const eliminarDelCarrito = (id)=>{
 
     carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
-    carrito = carrito.filter(p => p.seccion != seccion);
+    carrito = carrito.filter(p => p.id != id);
 
     localStorage.setItem("carrito", JSON.stringify(carrito));
 
@@ -294,17 +239,19 @@ const vaciarCarrito = ()=>{
 // ELIMINAR PRODUCTO DEL LISTADO
 //=========================================
 
-const eliminarProducto = (seccion)=>{
+const eliminarProducto = (id)=>{
+
+    if (!confirm("¿Estás seguro de que querés eliminar este producto?")) return;
 
     productos = JSON.parse(localStorage.getItem("productos")) || [];
 
-    productos = productos.filter(p => p.seccion != seccion);
+    productos = productos.filter(p => p.id != id);
 
     localStorage.setItem("productos", JSON.stringify(productos));
 
     // Si el producto estaba en el carrito, también lo eliminamos
     carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-    carrito = carrito.filter(p => p.seccion != seccion);
+    carrito = carrito.filter(p => p.id != id);
     localStorage.setItem("carrito", JSON.stringify(carrito));
 
     mostrarMensaje("Producto eliminado del listado");
@@ -319,11 +266,11 @@ const eliminarProducto = (seccion)=>{
 // ABRIR FORMULARIO EDITAR
 //=========================================
 
-const abrirEditar = (seccion)=>{
+const abrirEditar = (id)=>{
 
     productos = JSON.parse(localStorage.getItem("productos")) || [];
 
-    const producto = productos.find(p => p.seccion == seccion);
+    const producto = productos.find(p => p.id == id);
 
     if(!producto) return;
 
@@ -333,7 +280,9 @@ const abrirEditar = (seccion)=>{
 
     formEditar.precio.value = producto.precio;
 
-    formEditar.seccionOriginal.value = producto.seccionOriginal;
+    formEditar.seccionOriginal.value = producto.seccion;
+
+    formEditar.idProducto.value = producto.id;
 
     formEditar.style.display = "block";
 
@@ -351,7 +300,7 @@ const editarProducto = (e)=>{
 
     const formEditar = document.querySelector("#form-editar");
 
-    const seccionOriginal = Number(formEditar.seccionOriginal.value);
+    const idProducto = formEditar.idProducto.value;
 
     const nuevoNombre = formEditar.nombre.value;
 
@@ -359,7 +308,7 @@ const editarProducto = (e)=>{
 
     productos = JSON.parse(localStorage.getItem("productos")) || [];
 
-    const indice = productos.findIndex(p => p.codigo == seccionOriginal);
+    const indice = productos.findIndex(p => p.id == idProducto);
 
     if(indice !== -1){
 
@@ -372,7 +321,7 @@ const editarProducto = (e)=>{
         // Actualizar también en el carrito si existe
         carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
-        const enCarrito = carrito.find(p => p.seccion == seccionOriginal);
+        const enCarrito = carrito.find(p => p.id == idProducto);
 
         if(enCarrito){
 
